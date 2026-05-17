@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#4FC3F7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Monk Mode">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Monk Mode — Anderson</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0a0a0a;--card:#141414;--card2:#1a1a1a;--border:#222;--accent:#4FC3F7;--green:#4CAF50;--text:#ddd;--muted:#888;--dim:#555}
+body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+.splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.splash h1{color:var(--accent);font-size:28px;font-weight:800;letter-spacing:2px;margin:8px 0 4px}
+.splash .sub{color:#666;font-size:14px;letter-spacing:1px;margin-bottom:8px}
+.splash .enter{background:var(--accent);color:#000;border:none;border-radius:14px;padding:14px 40px;font-size:16px;font-weight:700;cursor:pointer;margin-top:24px;font-family:inherit}
+.header-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
+.btn-back{background:none;border:none;color:var(--accent);font-size:14px;cursor:pointer;padding:8px 0}
+.header-name{color:#fff;font-weight:700;font-size:16px}
+.week-select{padding:0 20px 20px}
+.week-select label{color:var(--muted);font-size:12px;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:8px}
+.week-btns{display:flex;gap:8px}
+.week-btn{flex:1;padding:10px 8px;border-radius:10px;border:none;cursor:pointer;font-size:13px;transition:all .2s;font-family:inherit}
+.week-btn.active{background:var(--accent);color:#000;font-weight:700}
+.week-btn:not(.active){background:var(--card);color:var(--muted)}
+.day-list{padding:0 20px 20px;display:flex;flex-direction:column;gap:10px}
+.day-card{background:linear-gradient(135deg,var(--card),#1e1e1e);border:1px solid #2a2a2a;border-radius:14px;padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .2s}
+.day-card:active{border-color:var(--accent)}
+.day-icon{font-size:28px;min-width:40px;text-align:center}
+.day-label{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
+.day-title{color:var(--text);font-size:14px;font-weight:600}
+.day-loc{color:#666;font-size:12px;margin-top:2px}
+.arrow{color:var(--dim);font-size:20px;margin-left:auto}
+.workout-header{background:linear-gradient(135deg,var(--card),var(--card2));padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.wh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.save-ind{color:var(--green);font-size:11px;font-weight:600;opacity:0;transition:opacity .3s}
+.save-ind.show{opacity:1}
+.wh-info{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.wh-icon{font-size:24px}.wh-day{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+.wh-title{color:#fff;font-size:15px;font-weight:600}
+.progress-bar{display:flex;align-items:center;gap:10px}
+.progress-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px;transition:width .3s ease,background .3s}
+.progress-text{font-size:12px;font-weight:600;min-width:50px;text-align:right}
+.exercise-list{padding:16px 16px 120px}
+.section-title{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:20px 0 10px 4px}
+.section-title:first-child{margin-top:0}
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;transition:all .2s}
+.ex-card.done{background:linear-gradient(135deg,#1a2a1a,#1e2e1e);border-color:#2a4a2a}
+.ex-main{padding:12px 14px;display:flex;align-items:center;gap:12px}
+.ex-check{width:28px;height:28px;border-radius:8px;border:2px solid #444;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:14px;color:#fff;font-family:inherit}
+.ex-check.done{border-color:var(--green);background:var(--green)}
+.ex-name{color:var(--text);font-size:14px;font-weight:500}
+.ex-card.done .ex-name{color:#8a8;text-decoration:line-through;opacity:.7}
+.ex-meta{display:flex;gap:12px;margin-top:4px}
+.ex-sets{color:var(--accent);font-size:11px;font-weight:600}
+.ex-rest{color:#666;font-size:11px}
+.ex-inputs{padding:0 14px 12px;display:flex;gap:8px;align-items:center}
+.weight-wrap{display:flex;align-items:center;gap:6px;background:var(--bg);border-radius:8px;padding:6px 10px;flex:1}
+.weight-wrap span{color:#666;font-size:11px}
+.weight-wrap input{background:transparent;border:none;color:#fff;font-size:13px;width:100%;outline:none;font-family:inherit}
+.note-btn{background:var(--bg);border:none;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:16px}
+.note-btn.has{background:#2a2a1a}
+.note-area{padding:0 14px 12px}
+.note-area textarea{width:100%;background:var(--bg);border:1px solid #333;border-radius:8px;color:#ccc;font-size:12px;padding:8px 10px;resize:vertical;outline:none;font-family:inherit}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(transparent,var(--bg) 30%);display:flex;gap:10px;justify-content:center}
+.btn-done{background:var(--green);color:#fff;padding:10px 24px;border-radius:12px;font-weight:700;font-size:14px;border:none}
+.btn-reset{background:var(--card);border:1px solid #333;border-radius:12px;padding:10px 20px;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+
+<div id="screen-days" class="screen active">
+  <div class="header-bar">
+    <div class="header-name">👋 Anderson</div>
+    <div style="width:90px"></div>
+  </div>
+  <div class="week-select">
+    <label>Semana</label>
+    <div class="week-btns" id="week-btns"></div>
+  </div>
+  <div class="day-list" id="day-list"></div>
+</div>
+
+<div id="screen-workout" class="screen">
+  <div class="workout-header">
+    <div class="wh-top">
+      <button class="btn-back" onclick="goToDays()">← Días</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="color:#888;font-size:12px" id="wk-label"></span>
+        <span class="save-ind" id="save-ind">✓ Guardado</span>
+      </div>
+    </div>
+    <div class="wh-info">
+      <span class="wh-icon" id="wh-icon"></span>
+      <div>
+        <div class="wh-day" id="wh-day"></div>
+        <div class="wh-title" id="wh-title"></div>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <span class="progress-text" id="progress-text"></span>
+    </div>
+  </div>
+  <div class="exercise-list" id="exercise-list"></div>
+  <div class="bottom-bar" id="bottom-bar"></div>
+</div>
+
+<script>
+const ROUTINE = {"lunes": {"title": "SmartFit: Full Body MAXIMIZADO", "icon": "🏋️", "location": "SmartFit", "sections": [{"name": "Pecho (Push)", "exercises": [{"id": "e-l-1", "name": "Press de pecho en máquina", "sets": "3x10-12", "rest": "2 min"}, {"id": "e-l-2", "name": "Aperturas en máquina (pec fly)", "sets": "3x12-15", "rest": "60 seg"}]}, {"name": "Hombros", "exercises": [{"id": "e-l-3", "name": "Press de hombro en máquina", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-l-4", "name": "Elevación lateral en máquina", "sets": "3x12-15", "rest": "60 seg"}]}, {"name": "Espalda (Pull)", "exercises": [{"id": "e-l-5", "name": "Jalón al pecho agarre amplio", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-l-6", "name": "Remo sentado en máquina", "sets": "3x10-12", "rest": "2 min"}, {"id": "e-l-7", "name": "Face pull en polea", "sets": "3x15-20", "rest": "60 seg"}]}, {"name": "Brazos", "exercises": [{"id": "e-l-8", "name": "Curl bíceps en máquina", "sets": "3x12-15", "rest": "60 seg"}, {"id": "e-l-9", "name": "Extensión tríceps en polea (cuerda)", "sets": "3x12-15", "rest": "60 seg"}]}, {"name": "Piernas (máquinas clave)", "exercises": [{"id": "e-l-10", "name": "Prensa de piernas", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-l-11", "name": "Curl femoral sentado", "sets": "3x12-15", "rest": "60 seg"}, {"id": "e-l-12", "name": "Abductor en máquina", "sets": "3x15-20", "rest": "60 seg"}]}, {"name": "Core", "exercises": [{"id": "e-l-13", "name": "Crunch en máquina", "sets": "3x15-20", "rest": "45 seg"}]}]}, "miercoles": {"title": "Caminata 1 Hora", "icon": "🚶", "location": "Aire libre", "sections": [{"name": "Cardio LISS", "exercises": [{"id": "e-mi-1", "name": "Caminata a paso constante", "sets": "1 hora", "rest": "—"}]}]}, "jueves": {"title": "Bicicleta 1 Hora", "icon": "🚴", "location": "Aire libre", "sections": [{"name": "Cardio", "exercises": [{"id": "e-j-1", "name": "Bicicleta con Carolina", "sets": "1 hora", "rest": "—"}]}]}, "viernes": {"title": "Tren Superior — Casa", "icon": "💪", "location": "Casa", "sections": [{"name": "Fuerza", "exercises": [{"id": "e-v-1", "name": "Press pecho plano con mancuernas", "sets": "3x10-12", "rest": "2 min"}, {"id": "e-v-2", "name": "Remo mancuernas a una mano", "sets": "3x10-12 c/lado", "rest": "90 seg"}, {"id": "e-v-3", "name": "Press Arnold con mancuernas", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-v-4", "name": "Remo mancuernas agarre prono", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-v-5", "name": "Elevación frontal + lateral", "sets": "3x12-15", "rest": "60 seg"}, {"id": "e-v-6", "name": "Press francés con mancuerna", "sets": "2x12-15", "rest": "60 seg"}, {"id": "e-v-7", "name": "Curl bíceps concentrado", "sets": "2x12-15 c/lado", "rest": "60 seg"}, {"id": "e-v-8", "name": "Plancha frontal (core)", "sets": "3x30-45seg", "rest": "45 seg"}]}]}};
+const DAY_LABELS = {lunes:"Lunes",martes:"Martes",miercoles:"Miércoles",jueves:"Jueves",viernes:"Viernes",sabado:"Sábado"};
+const WEEKS = ["Semana 1","Semana 2","Semana 3","Semana 4"];
+let currentWeek = "Semana 1";
+let currentDay = null;
+let exerciseData = {};
+let openNote = null;
+
+function sKey(w,d){return `mm_anderson_${w}_${d}`}
+function loadPrefs(){try{const p=JSON.parse(localStorage.getItem("mm_prefs_anderson"));if(p&&p.week)currentWeek=p.week}catch{}}
+function savePrefs(){localStorage.setItem("mm_prefs_anderson",JSON.stringify({week:currentWeek}))}
+function loadEx(){if(!currentDay){exerciseData={};return}try{const d=JSON.parse(localStorage.getItem(sKey(currentWeek,currentDay)));exerciseData=d||{}}catch{exerciseData={}}}
+function saveEx(){if(!currentDay)return;localStorage.setItem(sKey(currentWeek,currentDay),JSON.stringify(exerciseData));const el=document.getElementById("save-ind");if(el){el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1200)}}
+
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active")}
+function goToDays(){currentDay=null;openNote=null;renderDays();showScreen("screen-days")}
+function selectDay(d){currentDay=d;openNote=null;loadEx();renderWorkout();showScreen("screen-workout")}
+function selectWeek(w){currentWeek=w;savePrefs();if(currentDay){loadEx();renderWorkout()}renderDays()}
+
+function renderDays(){
+  const wc=document.getElementById("week-btns");
+  wc.innerHTML=WEEKS.map(w=>`<button class="week-btn ${w===currentWeek?'active':''}" onclick="selectWeek('${w}')">${w.replace('Semana ','Sem ')}</button>`).join('');
+  const dl=document.getElementById("day-list");
+  dl.innerHTML=Object.entries(ROUTINE).map(([key,day])=>`<div class="day-card" onclick="selectDay('${key}')"><div class="day-icon">${day.icon}</div><div style="flex:1"><div class="day-label">${DAY_LABELS[key]}</div><div class="day-title">${day.title}</div><div class="day-loc">📍 ${day.location}</div></div><div class="arrow">›</div></div>`).join('');
+}
+
+function renderWorkout(){
+  const day=ROUTINE[currentDay];if(!day)return;
+  document.getElementById("wk-label").textContent=currentWeek;
+  document.getElementById("wh-icon").textContent=day.icon;
+  document.getElementById("wh-day").textContent=DAY_LABELS[currentDay];
+  document.getElementById("wh-title").textContent=day.title;
+  const allEx=day.sections.flatMap(s=>s.exercises);
+  const done=allEx.filter(e=>exerciseData[e.id]?.done).length;
+  const total=allEx.length;const pct=total>0?(done/total)*100:0;const complete=pct===100;
+  document.getElementById("progress-fill").style.width=pct+"%";
+  document.getElementById("progress-fill").style.background=complete?"var(--green)":"var(--accent)";
+  document.getElementById("progress-text").textContent=`${done}/${total}`;
+  document.getElementById("progress-text").style.color=complete?"var(--green)":"var(--muted)";
+  let h='';
+  day.sections.forEach(sec=>{
+    h+=`<div class="section-title">${sec.name}</div>`;
+    sec.exercises.forEach(ex=>{
+      const d=exerciseData[ex.id]||{};const dn=!!d.done;const no=openNote===ex.id;
+      h+=`<div class="ex-card ${dn?'done':''}"><div class="ex-main"><button class="ex-check ${dn?'done':''}" onclick="toggleDone('${ex.id}')">${dn?'✓':''}</button><div style="flex:1;min-width:0"><div class="ex-name">${ex.name}</div><div class="ex-meta"><span class="ex-sets">${ex.sets}</span><span class="ex-rest">⏱ ${ex.rest}</span></div></div></div><div class="ex-inputs"><div class="weight-wrap"><span>⚖️</span><input type="number" inputmode="decimal" placeholder="Peso (kg)" value="${d.weight||''}" onchange="setWeight('${ex.id}',this.value)"/></div><button class="note-btn ${d.note?'has':''}" onclick="toggleNote('${ex.id}')">📝</button></div>${no?`<div class="note-area"><textarea rows="2" placeholder="Notas..." onchange="setNote('${ex.id}',this.value)">${d.note||''}</textarea></div>`:''}</div>`;
+    });
+  });
+  document.getElementById("exercise-list").innerHTML=h;
+  document.getElementById("bottom-bar").innerHTML=`${complete?'<div class="btn-done">✅ ¡Entrenamiento completado!</div>':''}<button class="btn-reset" onclick="resetDay()">🗑 Reiniciar día</button>`;
+}
+
+function toggleDone(id){if(!exerciseData[id])exerciseData[id]={};exerciseData[id].done=!exerciseData[id].done;saveEx();renderWorkout()}
+function setWeight(id,v){if(!exerciseData[id])exerciseData[id]={};exerciseData[id].weight=v;saveEx()}
+function setNote(id,v){if(!exerciseData[id])exerciseData[id]={};exerciseData[id].note=v;saveEx()}
+function toggleNote(id){openNote=openNote===id?null:id;renderWorkout()}
+function resetDay(){if(!confirm("¿Borrar todos los datos de este día?"))return;exerciseData={};localStorage.removeItem(sKey(currentWeek,currentDay));renderWorkout()}
+
+loadPrefs();renderDays();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body>
+</html>
