@@ -15,10 +15,6 @@
 :root{--bg:#0a0a0a;--card:#141414;--card2:#1a1a1a;--border:#222;--accent:#4FC3F7;--green:#4CAF50;--text:#ddd;--muted:#888;--dim:#555}
 body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 .screen{display:none;min-height:100vh}.screen.active{display:block}
-.splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-.splash h1{color:var(--accent);font-size:28px;font-weight:800;letter-spacing:2px;margin:8px 0 4px}
-.splash .sub{color:#666;font-size:14px;letter-spacing:1px;margin-bottom:8px}
-.splash .enter{background:var(--accent);color:#000;border:none;border-radius:14px;padding:14px 40px;font-size:16px;font-weight:700;cursor:pointer;margin-top:24px;font-family:inherit}
 .header-bar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
 .btn-back{background:none;border:none;color:var(--accent);font-size:14px;cursor:pointer;padding:8px 0}
 .header-name{color:#fff;font-weight:700;font-size:16px}
@@ -36,6 +32,11 @@ body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--
 .day-title{color:var(--text);font-size:14px;font-weight:600}
 .day-loc{color:#666;font-size:12px;margin-top:2px}
 .arrow{color:var(--dim);font-size:20px;margin-left:auto}
+
+/* Progress photos card */
+.photo-card{background:linear-gradient(135deg,#1a1a2a,#1e1e2e);border:1px solid #2a2a3a;border-radius:14px;padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .2s;margin-top:20px}
+.photo-card:active{border-color:var(--accent)}
+
 .workout-header{background:linear-gradient(135deg,var(--card),var(--card2));padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
 .wh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .save-ind{color:var(--green);font-size:11px;font-weight:600;opacity:0;transition:opacity .3s}
@@ -57,20 +58,43 @@ body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--
 .ex-check.done{border-color:var(--green);background:var(--green)}
 .ex-name{color:var(--text);font-size:14px;font-weight:500}
 .ex-card.done .ex-name{color:#8a8;text-decoration:line-through;opacity:.7}
-.ex-meta{display:flex;gap:12px;margin-top:4px}
+.ex-meta{display:flex;gap:8px;margin-top:4px;align-items:center;flex-wrap:wrap}
 .ex-sets{color:var(--accent);font-size:11px;font-weight:600}
 .ex-rest{color:#666;font-size:11px}
+.ex-video{color:#FF4444;font-size:11px;text-decoration:none;font-weight:600;background:#2a1a1a;padding:2px 8px;border-radius:6px}
 .ex-inputs{padding:0 14px 12px;display:flex;gap:8px;align-items:center}
 .weight-wrap{display:flex;align-items:center;gap:6px;background:var(--bg);border-radius:8px;padding:6px 10px;flex:1}
 .weight-wrap span{color:#666;font-size:11px}
 .weight-wrap input{background:transparent;border:none;color:#fff;font-size:13px;width:100%;outline:none;font-family:inherit}
-.note-btn{background:var(--bg);border:none;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:16px}
-.note-btn.has{background:#2a2a1a}
+.note-btn,.photo-btn{background:var(--bg);border:none;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:16px}
+.note-btn.has{background:#2a2a1a}.photo-btn.has{background:#1a2a2a}
 .note-area{padding:0 14px 12px}
 .note-area textarea{width:100%;background:var(--bg);border:1px solid #333;border-radius:8px;color:#ccc;font-size:12px;padding:8px 10px;resize:vertical;outline:none;font-family:inherit}
+.ex-photo-area{padding:0 14px 12px}
+.ex-photo-area img{width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-bottom:6px}
+.ex-photo-area .photo-actions{display:flex;gap:8px}
+.ex-photo-area button{background:var(--bg);border:1px solid #333;border-radius:8px;padding:6px 12px;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit}
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(transparent,var(--bg) 30%);display:flex;gap:10px;justify-content:center}
 .btn-done{background:var(--green);color:#fff;padding:10px 24px;border-radius:12px;font-weight:700;font-size:14px;border:none}
 .btn-reset{background:var(--card);border:1px solid #333;border-radius:12px;padding:10px 20px;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit}
+
+/* Progress Photos Screen */
+.photos-header{padding:20px;text-align:center}
+.photos-header h2{color:var(--accent);font-size:18px;margin-bottom:4px}
+.photos-header p{color:var(--muted);font-size:12px}
+.photo-grid{padding:0 16px 100px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.photo-slot{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.photo-slot .slot-label{color:var(--accent);font-size:11px;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.photo-slot img{width:100%;height:180px;object-fit:cover}
+.photo-slot .add-photo{background:none;border:2px dashed #333;border-radius:10px;width:80%;padding:20px;cursor:pointer;color:var(--dim);font-size:28px}
+.photo-slot .del-photo{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.7);border:none;color:#f66;font-size:14px;border-radius:50%;width:28px;height:28px;cursor:pointer}
+input[type="file"]{display:none}
+
+/* Modal overlay for full photo */
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:100;align-items:center;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.modal img{max-width:100%;max-height:80vh;border-radius:8px}
+.modal .close{position:absolute;top:16px;right:16px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -85,6 +109,26 @@ body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--
     <div class="week-btns" id="week-btns"></div>
   </div>
   <div class="day-list" id="day-list"></div>
+  <div style="padding:0 20px">
+    <div class="photo-card" onclick="goToPhotos()">
+      <div class="day-icon">📷</div>
+      <div style="flex:1">
+        <div class="day-label">Fotos de progreso</div>
+        <div class="day-title">Registra tu transformación</div>
+        <div class="day-loc">Frente, lateral, espalda</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+    <div class="photo-card" style="margin-top:10px;background:linear-gradient(135deg,#1a2a1a,#1e2e1e);border-color:#2a3a2a" onclick="goToNutrition()">
+      <div class="day-icon">🥩</div>
+      <div style="flex:1">
+        <div class="day-label">Guía Nutricional</div>
+        <div class="day-title">Plan para bajar grasa abdominal</div>
+        <div class="day-loc">Macros, comidas, qué evitar</div>
+      </div>
+      <div class="arrow">›</div>
+    </div>
+  </div>
 </div>
 
 <div id="screen-workout" class="screen">
@@ -112,31 +156,255 @@ body{font-family:-apple-system,'Segoe UI',system-ui,sans-serif;background:var(--
   <div class="bottom-bar" id="bottom-bar"></div>
 </div>
 
+<div id="screen-photos" class="screen">
+  <div class="header-bar">
+    <button class="btn-back" onclick="goToDays()">← Días</button>
+    <span style="color:#888;font-size:12px" id="photo-week-label"></span>
+  </div>
+  <div class="photos-header">
+    <h2>📷 Fotos de Progreso</h2>
+    <p>Toma fotos semanales para ver tu transformación</p>
+  </div>
+  <div class="photo-grid" id="photo-grid"></div>
+</div>
+
+<div id="screen-nutrition" class="screen">
+  <div class="header-bar">
+    <button class="btn-back" onclick="goToDays()">← Inicio</button>
+    <div></div>
+  </div>
+  <div style="padding:0 20px 60px">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:40px;margin-bottom:8px">🥩</div>
+      <h2 style="color:var(--accent);font-size:20px;margin-bottom:4px">Guía Nutricional</h2>
+      <p style="color:var(--muted);font-size:12px">Plan de recomposición — Bajar grasa abdominal</p>
+      <p style="color:var(--dim);font-size:11px;margin-top:4px">69.2 kg • 174 cm • Skinny fat</p>
+    </div>
+
+    <!-- MACROS -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">📊 TUS MACROS DIARIOS</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--bg);border-radius:10px;padding:12px;text-align:center">
+          <div style="color:var(--accent);font-size:22px;font-weight:800">2,000</div>
+          <div style="color:var(--muted);font-size:11px">kcal / día</div>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:12px;text-align:center">
+          <div style="color:#FF6B6B;font-size:22px;font-weight:800">135g</div>
+          <div style="color:var(--muted);font-size:11px">proteína</div>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:12px;text-align:center">
+          <div style="color:#FFD93D;font-size:22px;font-weight:800">210g</div>
+          <div style="color:var(--muted);font-size:11px">carbohidratos</div>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:12px;text-align:center">
+          <div style="color:#6BCB77;font-size:22px;font-weight:800">60g</div>
+          <div style="color:var(--muted);font-size:11px">grasas</div>
+        </div>
+      </div>
+      <div style="color:var(--dim);font-size:11px;margin-top:10px;text-align:center">Déficit suave (~200 kcal) para quemar grasa sin perder músculo</div>
+    </div>
+
+    <!-- REGLA DE ORO -->
+    <div style="background:linear-gradient(135deg,#2a2a1a,#1e1e1a);border:1px solid #3a3a2a;border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="color:#FFD93D;font-size:13px;font-weight:700;margin-bottom:8px">⚡ REGLA DE ORO</div>
+      <div style="color:var(--text);font-size:13px;line-height:1.6">Mínimo <strong style="color:#FF6B6B">30g de proteína por comida</strong>. Esto mantiene la saciedad alta, protege el músculo y acelera el metabolismo. Distribuir en 4-5 comidas, no comer todo de una.</div>
+    </div>
+
+    <!-- MEJORES PROTEINAS -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🥇 TUS MEJORES PROTEÍNAS</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:10px 12px">
+          <div><span style="font-size:16px">🍗</span> <span style="color:var(--text);font-size:13px;font-weight:600">Pechuga de pollo</span></div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">31g / 100g</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:10px 12px">
+          <div><span style="font-size:16px">🐟</span> <span style="color:var(--text);font-size:13px;font-weight:600">Atún en agua</span></div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">26g / lata</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:10px 12px">
+          <div><span style="font-size:16px">🥩</span> <span style="color:var(--text);font-size:13px;font-weight:600">Res magra (lomo)</span></div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">26g / 100g</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:10px 12px">
+          <div><span style="font-size:16px">🐖</span> <span style="color:var(--text);font-size:13px;font-weight:600">Lomo de cerdo</span></div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">27g / 100g</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:10px 12px">
+          <div><span style="font-size:16px">🥚</span> <span style="color:var(--text);font-size:13px;font-weight:600">Huevos (3-4/día)</span></div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">6g / unidad</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:8px;padding:10px 12px">
+          <div><span style="font-size:16px">🥛</span> <span style="color:var(--text);font-size:13px;font-weight:600">Whey Protein</span></div>
+          <div style="color:var(--accent);font-size:12px;font-weight:700">25-30g / scoop</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EJEMPLO DE MENU -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🍽️ EJEMPLO DE MENÚ DIARIO</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="border-left:3px solid #FFD93D;padding-left:12px">
+          <div style="color:#FFD93D;font-size:11px;font-weight:700">7:00 AM — DESAYUNO</div>
+          <div style="color:var(--text);font-size:13px">3 huevos revueltos + 2 arepas + café negro</div>
+          <div style="color:var(--muted);font-size:11px">~25g proteína • ~450 kcal</div>
+        </div>
+        <div style="border-left:3px solid #6BCB77;padding-left:12px">
+          <div style="color:#6BCB77;font-size:11px;font-weight:700">10:00 AM — MEDIA MAÑANA</div>
+          <div style="color:var(--text);font-size:13px">Yogur griego + puñado de maní</div>
+          <div style="color:var(--muted);font-size:11px">~15g proteína • ~200 kcal</div>
+        </div>
+        <div style="border-left:3px solid #FF6B6B;padding-left:12px">
+          <div style="color:#FF6B6B;font-size:11px;font-weight:700">1:00 PM — ALMUERZO</div>
+          <div style="color:var(--text);font-size:13px">200g pechuga a la plancha + arroz integral + ensalada con aguacate</div>
+          <div style="color:var(--muted);font-size:11px">~45g proteína • ~600 kcal</div>
+        </div>
+        <div style="border-left:3px solid var(--accent);padding-left:12px">
+          <div style="color:var(--accent);font-size:11px;font-weight:700">4:00 PM — PRE-ENTRENO</div>
+          <div style="color:var(--text);font-size:13px">Batido whey + banano + avena</div>
+          <div style="color:var(--muted);font-size:11px">~30g proteína • ~300 kcal</div>
+        </div>
+        <div style="border-left:3px solid #C49BFF;padding-left:12px">
+          <div style="color:#C49BFF;font-size:11px;font-weight:700">7:00 PM — CENA</div>
+          <div style="color:var(--text);font-size:13px">Atún en agua + ensalada + tostadas integrales</div>
+          <div style="color:var(--muted);font-size:11px">~25g proteína • ~350 kcal</div>
+        </div>
+      </div>
+      <div style="background:var(--bg);border-radius:8px;padding:10px;margin-top:12px;text-align:center">
+        <span style="color:#FF6B6B;font-weight:700">~140g proteína</span> <span style="color:var(--dim)">•</span> <span style="color:var(--accent);font-weight:700">~1,900 kcal</span>
+      </div>
+    </div>
+
+    <!-- QUE EVITAR -->
+    <div style="background:linear-gradient(135deg,#2a1a1a,#1e1414);border:1px solid #3a2a2a;border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="color:#FF6B6B;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🚫 EVITAR O REDUCIR</div>
+      <div style="display:flex;flex-direction:column;gap:8px;color:var(--text);font-size:13px;line-height:1.5">
+        <div>🍺 <strong>Cerveza/alcohol</strong> — frena la quema de grasa, calorías vacías. Máx 1-2 el fin de semana.</div>
+        <div>🥤 <strong>Gaseosas y jugos de caja</strong> — azúcar líquida que va directo al abdomen.</div>
+        <div>🍟 <strong>Fritos y empanizados</strong> — duplican las calorías. Mejor a la plancha o al horno.</div>
+        <div>🌭 <strong>Embutidos</strong> — poca proteína real, mucho sodio que infla.</div>
+        <div>🍞 <strong>Harinas refinadas</strong> — pan blanco, panadería. Mejor integral.</div>
+        <div>🐷 <strong>Chicharrón</strong> — permitido 1-2 veces/semana porción pequeña. Es muy calórico (40g grasa/100g).</div>
+        <div>🥩 <strong>Cortes grasos</strong> — quitar grasa visible, preferir lomo y pechuga.</div>
+      </div>
+    </div>
+
+    <!-- 3 HABITOS CLAVE -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px">
+      <div style="color:var(--accent);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">🎯 3 HÁBITOS QUE ATACAN LA GRASA ABDOMINAL</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="background:var(--accent);color:#000;font-weight:800;font-size:14px;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+          <div><div style="color:var(--text);font-size:13px;font-weight:600">Proteína en CADA comida</div><div style="color:var(--muted);font-size:12px">Mínimo 25-30g por comida. Mantiene saciedad y metabolismo activo.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="background:var(--accent);color:#000;font-weight:800;font-size:14px;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+          <div><div style="color:var(--text);font-size:13px;font-weight:600">Cero calorías líquidas</div><div style="color:var(--muted);font-size:12px">Nada de jugos, gaseosas ni alcohol entre semana. Solo agua, café negro o aromáticas.</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="background:var(--accent);color:#000;font-weight:800;font-size:14px;width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+          <div><div style="color:var(--text);font-size:13px;font-weight:600">Dormir 7+ horas</div><div style="color:var(--muted);font-size:12px">El cortisol del mal sueño almacena grasa directamente en el abdomen.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div style="background:linear-gradient(135deg,#1a2a1a,#1e2e1e);border:1px solid #2a4a2a;border-radius:14px;padding:16px;text-align:center">
+      <div style="color:var(--green);font-size:13px;font-weight:700;margin-bottom:6px">📅 LÍNEA DE TIEMPO REALISTA</div>
+      <div style="color:var(--text);font-size:13px;line-height:1.6">Semana 2-3: la ropa empieza a quedar diferente. Semana 6-8: diferencia visible en el abdomen. Mes 3-6: abdomen plano real. La báscula puede no bajar mucho porque estás ganando músculo — confía en el espejo y las fotos, no en el número.</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="photo-modal" onclick="closeModal()">
+  <button class="close" onclick="closeModal()">✕</button>
+  <img id="modal-img" src="" />
+</div>
+
+<input type="file" id="cam-ex" accept="image/*" capture="environment" onchange="handleExPhoto(this)" />
+<input type="file" id="cam-progress" accept="image/*" capture="environment" onchange="handleProgressPhoto(this)" />
+
 <script>
-const ROUTINE = {"lunes": {"title": "SmartFit: Full Body MAXIMIZADO", "icon": "🏋️", "location": "SmartFit", "sections": [{"name": "Pecho (Push)", "exercises": [{"id": "e-l-1", "name": "Press de pecho en máquina", "sets": "3x10-12", "rest": "2 min"}, {"id": "e-l-2", "name": "Aperturas en máquina (pec fly)", "sets": "3x12-15", "rest": "60 seg"}]}, {"name": "Hombros", "exercises": [{"id": "e-l-3", "name": "Press de hombro en máquina", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-l-4", "name": "Elevación lateral en máquina", "sets": "3x12-15", "rest": "60 seg"}]}, {"name": "Espalda (Pull)", "exercises": [{"id": "e-l-5", "name": "Jalón al pecho agarre amplio", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-l-6", "name": "Remo sentado en máquina", "sets": "3x10-12", "rest": "2 min"}, {"id": "e-l-7", "name": "Face pull en polea", "sets": "3x15-20", "rest": "60 seg"}]}, {"name": "Brazos", "exercises": [{"id": "e-l-8", "name": "Curl bíceps en máquina", "sets": "3x12-15", "rest": "60 seg"}, {"id": "e-l-9", "name": "Extensión tríceps en polea (cuerda)", "sets": "3x12-15", "rest": "60 seg"}]}, {"name": "Piernas (máquinas clave)", "exercises": [{"id": "e-l-10", "name": "Prensa de piernas", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-l-11", "name": "Curl femoral sentado", "sets": "3x12-15", "rest": "60 seg"}, {"id": "e-l-12", "name": "Abductor en máquina", "sets": "3x15-20", "rest": "60 seg"}]}, {"name": "Core", "exercises": [{"id": "e-l-13", "name": "Crunch en máquina", "sets": "3x15-20", "rest": "45 seg"}]}]}, "miercoles": {"title": "Caminata 1 Hora", "icon": "🚶", "location": "Aire libre", "sections": [{"name": "Cardio LISS", "exercises": [{"id": "e-mi-1", "name": "Caminata a paso constante", "sets": "1 hora", "rest": "—"}]}]}, "jueves": {"title": "Bicicleta 1 Hora", "icon": "🚴", "location": "Aire libre", "sections": [{"name": "Cardio", "exercises": [{"id": "e-j-1", "name": "Bicicleta con Carolina", "sets": "1 hora", "rest": "—"}]}]}, "viernes": {"title": "Tren Superior — Casa", "icon": "💪", "location": "Casa", "sections": [{"name": "Fuerza", "exercises": [{"id": "e-v-1", "name": "Press pecho plano con mancuernas", "sets": "3x10-12", "rest": "2 min"}, {"id": "e-v-2", "name": "Remo mancuernas a una mano", "sets": "3x10-12 c/lado", "rest": "90 seg"}, {"id": "e-v-3", "name": "Press Arnold con mancuernas", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-v-4", "name": "Remo mancuernas agarre prono", "sets": "3x10-12", "rest": "90 seg"}, {"id": "e-v-5", "name": "Elevación frontal + lateral", "sets": "3x12-15", "rest": "60 seg"}, {"id": "e-v-6", "name": "Press francés con mancuerna", "sets": "2x12-15", "rest": "60 seg"}, {"id": "e-v-7", "name": "Curl bíceps concentrado", "sets": "2x12-15 c/lado", "rest": "60 seg"}, {"id": "e-v-8", "name": "Plancha frontal (core)", "sets": "3x30-45seg", "rest": "45 seg"}]}]}};
+const ROUTINE = {"lunes": {"title": "SmartFit: Full Body MAXIMIZADO", "icon": "🏋️", "location": "SmartFit", "sections": [{"name": "Pecho Push", "exercises": [{"id": "e-l-1", "name": "Press de pecho en máquina", "sets": "3x10-12", "rest": "2 min", "video": "https://www.youtube.com/results?search_query=Press+de+pecho+en+maquina+ejercicio+tecnica"}, {"id": "e-l-2", "name": "Aperturas en máquina pec fly", "sets": "3x12-15", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Aperturas+en+maquina+pec+fly+ejercicio+tecnica"}]}, {"name": "Hombros", "exercises": [{"id": "e-l-3", "name": "Press de hombro en máquina", "sets": "3x10-12", "rest": "90 seg", "video": "https://www.youtube.com/results?search_query=Press+de+hombro+en+maquina+ejercicio+tecnica"}, {"id": "e-l-4", "name": "Elevación lateral en máquina", "sets": "3x12-15", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Elevacion+lateral+en+maquina+ejercicio+tecnica"}]}, {"name": "Espalda Pull", "exercises": [{"id": "e-l-5", "name": "Jalón al pecho agarre amplio", "sets": "3x10-12", "rest": "90 seg", "video": "https://www.youtube.com/results?search_query=Jalon+al+pecho+agarre+amplio+ejercicio+tecnica"}, {"id": "e-l-6", "name": "Remo sentado en máquina", "sets": "3x10-12", "rest": "2 min", "video": "https://www.youtube.com/results?search_query=Remo+sentado+en+maquina+ejercicio+tecnica"}, {"id": "e-l-7", "name": "Face pull en polea", "sets": "3x15-20", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Face+pull+en+polea+ejercicio+tecnica"}]}, {"name": "Brazos", "exercises": [{"id": "e-l-8", "name": "Curl bíceps en máquina", "sets": "3x12-15", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Curl+biceps+en+maquina+ejercicio+tecnica"}, {"id": "e-l-9", "name": "Extensión tríceps en polea cuerda", "sets": "3x12-15", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Extension+triceps+en+polea+cuerda+ejercicio+tecnica"}]}, {"name": "Piernas máquinas clave", "exercises": [{"id": "e-l-10", "name": "Prensa de piernas", "sets": "3x10-12", "rest": "90 seg", "video": "https://www.youtube.com/results?search_query=Prensa+de+piernas+ejercicio+tecnica"}, {"id": "e-l-11", "name": "Curl femoral sentado", "sets": "3x12-15", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Curl+femoral+sentado+ejercicio+tecnica"}, {"id": "e-l-12", "name": "Abductor en máquina", "sets": "3x15-20", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Abductor+en+maquina+ejercicio+tecnica"}]}, {"name": "Core", "exercises": [{"id": "e-l-13", "name": "Crunch en máquina", "sets": "3x15-20", "rest": "45 seg", "video": "https://www.youtube.com/results?search_query=Crunch+en+maquina+ejercicio+tecnica"}]}]}, "miercoles": {"title": "Caminata 1 Hora", "icon": "🚶", "location": "Aire libre", "sections": [{"name": "Cardio LISS", "exercises": [{"id": "e-mi-1", "name": "Caminata a paso constante", "sets": "1 hora", "rest": "—", "video": "https://www.youtube.com/results?search_query=Caminata+a+paso+constante+ejercicio+tecnica"}]}]}, "jueves": {"title": "Bicicleta 1 Hora", "icon": "🚴", "location": "Aire libre", "sections": [{"name": "Cardio", "exercises": [{"id": "e-j-1", "name": "Bicicleta con Carolina", "sets": "1 hora", "rest": "—", "video": "https://www.youtube.com/results?search_query=Bicicleta+con+Carolina+ejercicio+tecnica"}]}]}, "viernes": {"title": "Tren Superior Casa", "icon": "💪", "location": "Casa", "sections": [{"name": "Fuerza", "exercises": [{"id": "e-v-1", "name": "Press pecho plano con mancuernas", "sets": "3x10-12", "rest": "2 min", "video": "https://www.youtube.com/results?search_query=Press+pecho+plano+con+mancuernas+ejercicio+tecnica"}, {"id": "e-v-2", "name": "Remo mancuernas a una mano", "sets": "3x10-12 c/lado", "rest": "90 seg", "video": "https://www.youtube.com/results?search_query=Remo+mancuernas+a+una+mano+ejercicio+tecnica"}, {"id": "e-v-3", "name": "Press Arnold con mancuernas", "sets": "3x10-12", "rest": "90 seg", "video": "https://www.youtube.com/results?search_query=Press+Arnold+con+mancuernas+ejercicio+tecnica"}, {"id": "e-v-4", "name": "Remo mancuernas agarre prono", "sets": "3x10-12", "rest": "90 seg", "video": "https://www.youtube.com/results?search_query=Remo+mancuernas+agarre+prono+ejercicio+tecnica"}, {"id": "e-v-5", "name": "Elevación frontal y lateral", "sets": "3x12-15", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Elevacion+frontal+y+lateral+ejercicio+tecnica"}, {"id": "e-v-6", "name": "Press francés con mancuerna", "sets": "2x12-15", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Press+frances+con+mancuerna+ejercicio+tecnica"}, {"id": "e-v-7", "name": "Curl bíceps concentrado", "sets": "2x12-15 c/lado", "rest": "60 seg", "video": "https://www.youtube.com/results?search_query=Curl+biceps+concentrado+ejercicio+tecnica"}, {"id": "e-v-8", "name": "Plancha frontal core", "sets": "3x30-45seg", "rest": "45 seg", "video": "https://www.youtube.com/results?search_query=Plancha+frontal+core+ejercicio+tecnica"}]}]}};
 const DAY_LABELS = {lunes:"Lunes",martes:"Martes",miercoles:"Miércoles",jueves:"Jueves",viernes:"Viernes",sabado:"Sábado"};
 const WEEKS = ["Semana 1","Semana 2","Semana 3","Semana 4"];
-let currentWeek = "Semana 1";
-let currentDay = null;
-let exerciseData = {};
-let openNote = null;
+const PHOTO_SLOTS = ["Frente","Lateral Izq","Lateral Der","Espalda"];
+let currentWeek="Semana 1",currentDay=null,exerciseData={},openNote=null,openPhoto=null,pendingPhotoId=null,pendingSlot=null;
 
 function sKey(w,d){return `mm_anderson_${w}_${d}`}
+function pKey(w,slot){return `mm_anderson_photo_${w}_${slot}`}
 function loadPrefs(){try{const p=JSON.parse(localStorage.getItem("mm_prefs_anderson"));if(p&&p.week)currentWeek=p.week}catch{}}
 function savePrefs(){localStorage.setItem("mm_prefs_anderson",JSON.stringify({week:currentWeek}))}
-function loadEx(){if(!currentDay){exerciseData={};return}try{const d=JSON.parse(localStorage.getItem(sKey(currentWeek,currentDay)));exerciseData=d||{}}catch{exerciseData={}}}
-function saveEx(){if(!currentDay)return;localStorage.setItem(sKey(currentWeek,currentDay),JSON.stringify(exerciseData));const el=document.getElementById("save-ind");if(el){el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1200)}}
+function loadEx(){if(!currentDay){exerciseData={};return}try{exerciseData=JSON.parse(localStorage.getItem(sKey(currentWeek,currentDay)))||{}}catch{exerciseData={}}}
+function saveEx(){if(!currentDay)return;localStorage.setItem(sKey(currentWeek,currentDay),JSON.stringify(exerciseData));showSaved()}
+function showSaved(){const el=document.getElementById("save-ind");if(el){el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1200)}}
 
 function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active")}
-function goToDays(){currentDay=null;openNote=null;renderDays();showScreen("screen-days")}
-function selectDay(d){currentDay=d;openNote=null;loadEx();renderWorkout();showScreen("screen-workout")}
+function goToDays(){currentDay=null;openNote=null;openPhoto=null;renderDays();showScreen("screen-days")}
+function goToNutrition(){showScreen("screen-nutrition")}
+function selectDay(d){currentDay=d;openNote=null;openPhoto=null;loadEx();renderWorkout();showScreen("screen-workout")}
 function selectWeek(w){currentWeek=w;savePrefs();if(currentDay){loadEx();renderWorkout()}renderDays()}
 
+function resizeImg(file,maxW,cb){
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      const canvas=document.createElement("canvas");
+      let w=img.width,h=img.height;
+      if(w>maxW){h=h*(maxW/w);w=maxW}
+      canvas.width=w;canvas.height=h;
+      canvas.getContext("2d").drawImage(img,0,0,w,h);
+      cb(canvas.toDataURL("image/jpeg",0.7));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Exercise photos
+function takeExPhoto(id){pendingPhotoId=id;document.getElementById("cam-ex").click()}
+function handleExPhoto(input){
+  if(!input.files[0]||!pendingPhotoId)return;
+  resizeImg(input.files[0],400,function(data){
+    if(!exerciseData[pendingPhotoId])exerciseData[pendingPhotoId]={};
+    exerciseData[pendingPhotoId].photo=data;
+    saveEx();renderWorkout();
+  });
+  input.value="";
+}
+function deleteExPhoto(id){
+  if(exerciseData[id])delete exerciseData[id].photo;
+  saveEx();renderWorkout();
+}
+
+// Progress photos
+function goToPhotos(){
+  document.getElementById("photo-week-label").textContent=currentWeek;
+  renderPhotos();showScreen("screen-photos");
+}
+function takeProgressPhoto(slot){pendingSlot=slot;document.getElementById("cam-progress").click()}
+function handleProgressPhoto(input){
+  if(!input.files[0]||pendingSlot===null)return;
+  resizeImg(input.files[0],600,function(data){
+    localStorage.setItem(pKey(currentWeek,pendingSlot),data);
+    renderPhotos();
+  });
+  input.value="";
+}
+function deleteProgressPhoto(slot){
+  if(!confirm("¿Borrar esta foto?"))return;
+  localStorage.removeItem(pKey(currentWeek,slot));
+  renderPhotos();
+}
+function openModal(src){document.getElementById("modal-img").src=src;document.getElementById("photo-modal").classList.add("active")}
+function closeModal(){document.getElementById("photo-modal").classList.remove("active")}
+
 function renderDays(){
-  const wc=document.getElementById("week-btns");
-  wc.innerHTML=WEEKS.map(w=>`<button class="week-btn ${w===currentWeek?'active':''}" onclick="selectWeek('${w}')">${w.replace('Semana ','Sem ')}</button>`).join('');
-  const dl=document.getElementById("day-list");
-  dl.innerHTML=Object.entries(ROUTINE).map(([key,day])=>`<div class="day-card" onclick="selectDay('${key}')"><div class="day-icon">${day.icon}</div><div style="flex:1"><div class="day-label">${DAY_LABELS[key]}</div><div class="day-title">${day.title}</div><div class="day-loc">📍 ${day.location}</div></div><div class="arrow">›</div></div>`).join('');
+  document.getElementById("week-btns").innerHTML=WEEKS.map(w=>`<button class="week-btn ${w===currentWeek?'active':''}" onclick="selectWeek('${w}')">${w.replace('Semana ','Sem ')}</button>`).join('');
+  document.getElementById("day-list").innerHTML=Object.entries(ROUTINE).map(([k,d])=>`<div class="day-card" onclick="selectDay('${k}')"><div class="day-icon">${d.icon}</div><div style="flex:1"><div class="day-label">${DAY_LABELS[k]}</div><div class="day-title">${d.title}</div><div class="day-loc">📍 ${d.location}</div></div><div class="arrow">›</div></div>`).join('');
 }
 
 function renderWorkout(){
@@ -156,18 +424,46 @@ function renderWorkout(){
   day.sections.forEach(sec=>{
     h+=`<div class="section-title">${sec.name}</div>`;
     sec.exercises.forEach(ex=>{
-      const d=exerciseData[ex.id]||{};const dn=!!d.done;const no=openNote===ex.id;
-      h+=`<div class="ex-card ${dn?'done':''}"><div class="ex-main"><button class="ex-check ${dn?'done':''}" onclick="toggleDone('${ex.id}')">${dn?'✓':''}</button><div style="flex:1;min-width:0"><div class="ex-name">${ex.name}</div><div class="ex-meta"><span class="ex-sets">${ex.sets}</span><span class="ex-rest">⏱ ${ex.rest}</span></div></div></div><div class="ex-inputs"><div class="weight-wrap"><span>⚖️</span><input type="number" inputmode="decimal" placeholder="Peso (kg)" value="${d.weight||''}" onchange="setWeight('${ex.id}',this.value)"/></div><button class="note-btn ${d.note?'has':''}" onclick="toggleNote('${ex.id}')">📝</button></div>${no?`<div class="note-area"><textarea rows="2" placeholder="Notas..." onchange="setNote('${ex.id}',this.value)">${d.note||''}</textarea></div>`:''}</div>`;
+      const d=exerciseData[ex.id]||{};const dn=!!d.done;const no=openNote===ex.id;const po=openPhoto===ex.id;
+      h+=`<div class="ex-card ${dn?'done':''}">
+        <div class="ex-main">
+          <button class="ex-check ${dn?'done':''}" onclick="toggleDone('${ex.id}')">${dn?'✓':''}</button>
+          <div style="flex:1;min-width:0">
+            <div class="ex-name">${ex.name}</div>
+            <div class="ex-meta">
+              <span class="ex-sets">${ex.sets}</span>
+              <span class="ex-rest">⏱ ${ex.rest}</span>
+              <a href="${ex.video}" target="_blank" class="ex-video" onclick="event.stopPropagation()">▶ Video</a>
+            </div>
+          </div>
+        </div>
+        <div class="ex-inputs">
+          <div class="weight-wrap"><span>⚖️</span><input type="number" inputmode="decimal" placeholder="Peso (kg)" value="${d.weight||''}" onchange="setWeight('${ex.id}',this.value)"/></div>
+          <button class="photo-btn ${d.photo?'has':''}" onclick="${d.photo?`togglePhoto('${ex.id}')`:`takeExPhoto('${ex.id}')`}">📷</button>
+          <button class="note-btn ${d.note?'has':''}" onclick="toggleNote('${ex.id}')">📝</button>
+        </div>
+        ${po&&d.photo?`<div class="ex-photo-area"><img src="${d.photo}" onclick="openModal('${d.photo}')" /><div class="photo-actions"><button onclick="takeExPhoto('${ex.id}')">📷 Cambiar</button><button onclick="deleteExPhoto('${ex.id}')">🗑 Borrar</button></div></div>`:''}        ${no?`<div class="note-area"><textarea rows="2" placeholder="Notas..." onchange="setNote('${ex.id}',this.value)">${d.note||''}</textarea></div>`:''}
+      </div>`;
     });
   });
   document.getElementById("exercise-list").innerHTML=h;
   document.getElementById("bottom-bar").innerHTML=`${complete?'<div class="btn-done">✅ ¡Entrenamiento completado!</div>':''}<button class="btn-reset" onclick="resetDay()">🗑 Reiniciar día</button>`;
 }
 
+function renderPhotos(){
+  const grid=document.getElementById("photo-grid");
+  grid.innerHTML=PHOTO_SLOTS.map((slot,i)=>{
+    const data=localStorage.getItem(pKey(currentWeek,i));
+    if(data)return `<div class="photo-slot"><div class="slot-label">${slot}</div><img src="${data}" onclick="openModal('${data}')" /><button class="del-photo" onclick="deleteProgressPhoto(${i})">✕</button></div>`;
+    return `<div class="photo-slot"><div class="slot-label">${slot}</div><button class="add-photo" onclick="takeProgressPhoto(${i})">📷</button></div>`;
+  }).join('');
+}
+
 function toggleDone(id){if(!exerciseData[id])exerciseData[id]={};exerciseData[id].done=!exerciseData[id].done;saveEx();renderWorkout()}
 function setWeight(id,v){if(!exerciseData[id])exerciseData[id]={};exerciseData[id].weight=v;saveEx()}
 function setNote(id,v){if(!exerciseData[id])exerciseData[id]={};exerciseData[id].note=v;saveEx()}
-function toggleNote(id){openNote=openNote===id?null:id;renderWorkout()}
+function toggleNote(id){openNote=openNote===id?null:id;openPhoto=null;renderWorkout()}
+function togglePhoto(id){openPhoto=openPhoto===id?null:id;openNote=null;renderWorkout()}
 function resetDay(){if(!confirm("¿Borrar todos los datos de este día?"))return;exerciseData={};localStorage.removeItem(sKey(currentWeek,currentDay));renderWorkout()}
 
 loadPrefs();renderDays();
