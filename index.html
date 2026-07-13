@@ -170,6 +170,23 @@
   }
   .play svg{width:12px; height:12px; fill:#0E0F13}
 
+  .circuit-head{display:flex; align-items:center; gap:8px; margin:18px 0 8px}
+  .circuit-head .c-titlewrap{flex:1; display:flex; flex-direction:column; gap:2px}
+  .circuit-head .c-title{
+    font-size:11px; font-weight:700; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent);
+  }
+  .circuit-head .c-sub{font-size:11.5px; color:var(--muted); font-weight:600}
+  .hiit-check{
+    flex:0 0 auto; width:32px; height:32px; border-radius:8px; cursor:pointer;
+    border:1px solid var(--line); background:var(--surface-2); color:var(--muted);
+    font-size:15px; display:grid; place-items:center; transition:.15s;
+  }
+  .hiit-check.on{background:var(--ok); border-color:var(--ok); color:#0E0F13}
+  .circuit-run.done{
+    border-style:solid; border-color:var(--ok); color:var(--ok);
+    background:rgba(52,211,153,.10);
+  }
   .circuit-run{
     width:100%; border:1px dashed var(--accent); background:rgba(59,130,246,.08);
     color:var(--accent); border-radius:12px; padding:11px; font-weight:700; font-size:13px;
@@ -217,27 +234,35 @@
   .nav button.active{color:var(--accent)}
   .nav button.active svg{stroke:var(--accent)}
 
-  /* ── Timer modal ── */
+  /* ── Timer (panel acoplado abajo, deja ver la lista) ── */
   .timer-back{
-    position:fixed; inset:0; z-index:50; background:rgba(8,9,12,.92);
-    display:none; align-items:center; justify-content:center; flex-direction:column; padding:24px;
+    position:fixed; left:0; right:0; bottom:0; z-index:50; display:none;
   }
-  .timer-back.show{display:flex}
-  .timer-phase{font-size:13px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700}
-  .timer-ex{font-size:19px; font-weight:700; margin-top:8px; text-align:center; min-height:26px}
-  .ring{position:relative; width:230px; height:230px; margin:22px 0}
-  .ring svg{transform:rotate(-90deg)}
+  .timer-back.show{display:block}
+  .timer-panel{
+    background:var(--surface-2); border-top:2px solid var(--accent);
+    border-radius:20px 20px 0 0; box-shadow:0 -12px 40px rgba(0,0,0,.55);
+    padding:16px 18px calc(16px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:16px;
+  }
+  .timer-phase{font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); font-weight:700}
+  .timer-ex{font-size:17px; font-weight:700; margin:4px 0; line-height:1.2}
+  .ring{position:relative; width:120px; height:120px; flex:0 0 auto}
+  .ring svg{transform:rotate(-90deg); width:120px; height:120px}
   .ring .num{
     position:absolute; inset:0; display:grid; place-items:center;
-    font-family:var(--display); font-weight:400; font-size:78px;
+    font-family:var(--display); font-weight:400; font-size:42px;
   }
-  .timer-meta{color:var(--muted); font-size:13px; margin-bottom:20px}
-  .timer-actions{display:flex; gap:10px}
+  .timer-info{flex:1; min-width:0}
+  .timer-meta{color:var(--muted); font-size:12px; margin-bottom:10px}
+  .timer-actions{display:flex; gap:8px}
   .timer-actions button{
     border:1px solid var(--line); background:var(--surface); color:var(--text);
-    border-radius:12px; padding:12px 22px; font-weight:700; font-size:14px; cursor:pointer;
+    border-radius:10px; padding:9px 16px; font-weight:700; font-size:13px; cursor:pointer;
   }
   .timer-actions .stop{background:var(--accent); border-color:var(--accent); color:#0E0F13}
+  /* al abrir el timer, deja espacio para poder desplazar la lista por encima */
+  body.timer-open{padding-bottom:240px}
 
   /* ── Comida / macros ── */
   .card-lg{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin-bottom:12px}
@@ -342,8 +367,9 @@
       <p>Cada día trae <b>dos versiones del mismo entrenamiento</b>: una para <b>CASA</b> (mancuernas, dominadas, máquina de abs, peso corporal) y otra para <b>GYM</b> (máquinas, barra, poleas). <b>Casa es la opción por defecto</b>; toca el botón <b>Gym</b> arriba solo los días que vayas a SmartFit. El HIIT final es el mismo en ambas.</p>
     </div>
     <div class="info-card">
-      <h3>HIIT todos los días</h3>
-      <p>Cada sesión cierra con un <b>circuito HIIT</b> (30 s trabajo / 10 s descanso). Es tu motor de gasto calórico y acondicionamiento para la grasa abdominal. Toca <b>“Correr circuito completo”</b> y el timer te va guiando. Opcional: 15–20 min de elíptica suave los días que quieras sumar cardio.</p>
+      <h3>HIIT + cardio (cierre de cada día)</h3>
+      <p>Cada sesión cierra con un <b>circuito HIIT</b> (30 s trabajo / 10 s descanso). Se hace por <b>series (vueltas)</b>: <b>3 series</b> en Semana 1–2 y <b>4 series</b> en Semana 3–4, con 60 s de descanso entre serie y serie. Toca <b>“Correr HIIT”</b> y el timer te guía mostrando en qué serie vas; al terminar todas, el HIIT queda <b>marcado ✓</b> solo (también puedes marcarlo a mano).</p>
+      <p style="margin-top:8px">Después, <b>cardio LISS 20–30 min</b> a ritmo suave: <b>elíptica</b> si entrenas en casa, <b>caminadora</b> si vas al gym. La app te muestra la máquina según el modo que elijas.</p>
     </div>
     <div class="info-card">
       <h3>El déficit calórico (por qué se baja de peso)</h3>
@@ -368,7 +394,8 @@
         <li><b>🎬 Video</b> — abre la demostración del ejercicio.</li>
         <li><b>▶ 30 s</b> — inicia el timer de ese ejercicio del HIIT (10 s de descanso entre cada uno).</li>
         <li><b>ISO</b> — ejercicio isométrico (mantener la posición). El tiempo sube por semana: 30 → 40 → 60 → 90 s.</li>
-        <li><b>Casa / Gym</b> — botón arriba de cada día para cambiar entre las dos versiones (Casa por defecto).</li>
+        <li><b>Casa / Gym</b> — botón arriba de cada día para cambiar entre las dos versiones (Casa por defecto). También cambia el cardio: elíptica (casa) o caminadora (gym).</li>
+        <li><b>✓ HIIT</b> — se marca solo al terminar el circuito; también puedes tocarlo para marcar/desmarcar.</li>
       </ul>
     </div>
   </section>
@@ -393,25 +420,29 @@
     </button>
   </nav>
 
-  <!-- Timer -->
+  <!-- Timer (panel acoplado abajo) -->
   <div class="timer-back" id="timerBack">
-    <div class="timer-phase" id="tPhase">Prepárate</div>
-    <div class="timer-ex" id="tEx"></div>
-    <div class="ring">
-      <svg width="230" height="230" viewBox="0 0 230 230">
-        <circle cx="115" cy="115" r="104" stroke="#2A2E38" stroke-width="14" fill="none"/>
-        <circle id="tArc" cx="115" cy="115" r="104" stroke="url(#g)" stroke-width="14" fill="none"
-                stroke-linecap="round" stroke-dasharray="653" stroke-dashoffset="0"/>
-        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#60A5FA"/>
-        </linearGradient></defs>
-      </svg>
-      <div class="num" id="tNum">0</div>
-    </div>
-    <div class="timer-meta" id="tMeta"></div>
-    <div class="timer-actions">
-      <button id="tPause">Pausa</button>
-      <button class="stop" id="tStop">Terminar</button>
+    <div class="timer-panel">
+      <div class="ring">
+        <svg width="120" height="120" viewBox="0 0 230 230">
+          <circle cx="115" cy="115" r="104" stroke="#2A2E38" stroke-width="16" fill="none"/>
+          <circle id="tArc" cx="115" cy="115" r="104" stroke="url(#g)" stroke-width="16" fill="none"
+                  stroke-linecap="round" stroke-dasharray="653" stroke-dashoffset="0"/>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#60A5FA"/>
+          </linearGradient></defs>
+        </svg>
+        <div class="num" id="tNum">0</div>
+      </div>
+      <div class="timer-info">
+        <div class="timer-phase" id="tPhase">Prepárate</div>
+        <div class="timer-ex" id="tEx"></div>
+        <div class="timer-meta" id="tMeta"></div>
+        <div class="timer-actions">
+          <button id="tPause">Pausa</button>
+          <button class="stop" id="tStop">Terminar</button>
+        </div>
+      </div>
     </div>
   </div>
 
