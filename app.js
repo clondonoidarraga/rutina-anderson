@@ -180,6 +180,20 @@ const $  = (s,el=document)=>el.querySelector(s);
 const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
 const el = (tag,cls,html)=>{ const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; };
 const PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+const VIDEO_ICON = '<svg viewBox="0 0 24 24"><path d="M4 5h11a2 2 0 0 1 2 2v2.5l4-2.5v10l-4-2.5V17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>';
+
+/* Botón de video: usa ex.video si existe; si no, busca el ejercicio en YouTube. */
+function videoBtn(ex){
+  const b = el('button','vid', VIDEO_ICON);
+  b.title = 'Ver video: '+ex.name;
+  b.setAttribute('aria-label','Ver video de '+ex.name);
+  b.onclick = ()=>{
+    const url = ex.video
+      || ('https://www.youtube.com/results?search_query=' + encodeURIComponent(ex.name + ' técnica ejercicio'));
+    window.open(url, '_blank', 'noopener');
+  };
+  return b;
+}
 
 /* ---------- 5. RENDER: selector de semanas + banner de esquema ---------- */
 function renderWeeks(){
@@ -244,7 +258,9 @@ function renderSet(g){
   const m = g.main;
   const tag = m.tag ? `<span class="chip">${m.tag}</span>` : '';
   const iso = m.iso ? `<span class="chip">ISO</span>` : '';
-  card.appendChild(el('div','row-main', `<div class="ex-name">${m.name}${tag}${iso}</div>`));
+  const rm = el('div','row-main', `<div class="ex-name">${m.name}${tag}${iso}</div>`);
+  rm.appendChild(videoBtn(m));
+  card.appendChild(rm);
 
   // El principal isométrico no lleva log de peso: lleva timer.
   if(m.iso){
@@ -290,7 +306,10 @@ function timedRow(ex, isIso){
   const row = el('div','timed', `<div><div class="t-name">${ex.name}</div><div class="t-sub">${sub}</div></div>`);
   const btn = el('button','play', `${PLAY}${secs}s`);
   btn.onclick = ()=> Timer.start([{ label: isIso?'Mantén':'Trabaja', ex:ex.name, sec:secs }]);
-  row.appendChild(btn);
+  const actions = el('div','timed-actions');
+  actions.appendChild(videoBtn(ex));
+  actions.appendChild(btn);
+  row.appendChild(actions);
   return row;
 }
 

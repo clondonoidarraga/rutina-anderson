@@ -1,6 +1,6 @@
 /* Service worker: guarda la app en caché para que abra sin internet.
    Sube el número de CACHE cada vez que edites archivos, así se refresca. */
-const CACHE = 'monk-mode-anderson-v2';
+const CACHE = 'monk-mode-anderson-v3';
 const ASSETS = [
   './',
   './index.html',
